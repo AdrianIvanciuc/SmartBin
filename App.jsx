@@ -3,23 +3,22 @@ import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { auth } from "./database.js";
-import emailjs from "@emailjs/browser"
 import Home from './Home.jsx'
 import Account from './Account.jsx'
 import QRgen from './QRgen.jsx';
 import Login from './Login.jsx'
 import Register from './Register.jsx'
+import emailjs from "@emailjs/browser"
 
 export default function App(){
 
     useEffect(() => { // initialize mail function
-        emailjs.init({
-            publicKey: import.meta.env.VITE_PUBLIC_KEY,
-        });
+    emailjs.init({
+        publicKey: import.meta.env.VITE_PUBLIC_KEY,
+    });
     }, []);
 
     const [user] = useAuthState(auth);
-
     let bool = 0;
 
     const sidebar = () => {

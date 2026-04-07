@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, validateEmail, newUser } from "./database.js";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import emailjs from "@emailjs/browser"
+import { makeRandom, sendMail } from './mail.js';
 
 export default function Register(props) {
     
@@ -20,16 +20,6 @@ export default function Register(props) {
     }
     const [emailEvent, setEmailEvent] = useState(false);
     const [message, setMessage] = useState('');
-    
-    const makeRandom = () => { // function makes a random 16 char string
-        let result           = '';
-        let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let charactersLength = characters.length;
-        for ( let i = 0; i < 16; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-    }
     const code = useMemo(() => {
         return makeRandom();
     }, []);
@@ -50,10 +40,6 @@ export default function Register(props) {
                 setMessage("Password must have at least one number!");
             }
             else {
-                let emailParams = {
-                message: code,
-                to_email: formData.email
-                }
                 let result = await validateEmail(formData.email);
                 if (result == false)
                 {
@@ -62,14 +48,7 @@ export default function Register(props) {
                 else
                 {
                     setMessage('');
-                    emailjs.send(import.meta.env.VITE_SERVICE_ID, import.meta.env.VITE_TEMPLATE_ID, emailParams).then(
-                        (response) => {
-                            console.log('SUCCESS!', response.status, response.text);
-                        },
-                        (error) => {
-                            console.log('FAILED...', error);
-                        },
-                    );
+                    sendMail(formData.email, code);
                     setEmailEvent(!emailEvent);
                 }
             }
@@ -77,7 +56,7 @@ export default function Register(props) {
         else {
             setMessage("Passwords do not match!");
         }
-    };
+    }
 
     async function handleEmailSubmit(event) { // second form for email validation
         event.preventDefault();
