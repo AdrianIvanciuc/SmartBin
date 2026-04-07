@@ -1,0 +1,33 @@
+/* Layout */
+.display-row {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.display-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Module */
+input {
+    background-color: #B2D732;
+    color: #092834;
+    font-family: arial, sans-serif;
+    font-size: 1.25rem;
+    margin: 0.25%;
+}
+
+.pageButton {
+    width: fit-content;
+    border-radius: 200px;
+    margin: 0.25%;
+}
+
+label {
+    font-size: 1.5rem;
+    margin: 0.25%;
+}
